@@ -36,8 +36,8 @@ module IDEX(
     output reg [31:0]rs2_val_out
 );
 
-always@(negedge clk or posedge clr or posedge stall) begin
-    if(clr | stall) begin 
+always@(negedge clk) begin
+    if(stall || clr) begin 
         jump_out <= 1'b0;
         branch_out <= 4'b0;
         unsign_out <= 1'b0;
@@ -67,7 +67,7 @@ always@(negedge clk or posedge clr or posedge stall) begin
         rs2_out <= rs2;
         PC_IN_out <= PC_IN;
         immediate_select_out <= immediate_select;
-        immediate_out <= immediate_out;
+        immediate_out <= immediate;
         ALU_out <= ALU;
         rd_out <= rd;
         rs1_val_out <= rs1_val;

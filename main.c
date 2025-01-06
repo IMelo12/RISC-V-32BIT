@@ -381,7 +381,8 @@ int main(int argc, char* argv[]) {
     };
 
     char buff[9];
-    for (int k = 0; k < sizeof(data) / sizeof(data[0]); k++) {
+    int k;
+    for (k = 0; k < sizeof(data) / sizeof(data[0]); k++) {
         // Use the opcode to look up the appropriate handler
         InstructionHandler handler = handlers[data[k][0]];
         if (handler) {
