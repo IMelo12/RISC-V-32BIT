@@ -9,7 +9,7 @@ module IFID(
 );
 
 
-always@(posedge clk or posedge clr or negedge stall) begin
+always@(posedge clk) begin
 	if(clr) begin
 		instruction_out <= 32'b0;
 		PC_out <= 32'b0;

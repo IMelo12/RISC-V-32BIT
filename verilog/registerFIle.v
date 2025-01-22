@@ -17,7 +17,7 @@ initial begin
 		register[i] = 32'b0;
 end
 
-always@(posedge clk or posedge clr) begin
+always@(posedge clk) begin
 	if(clr) begin
 		for(int i = 0; i<32; i++)
 			register[i] <= 32'b0;

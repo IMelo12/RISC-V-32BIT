@@ -6,7 +6,7 @@ module program_counter(
 	output reg [31:0] count_out
 );
 
-always @(posedge clk or posedge clr) begin
+always @(posedge clk) begin
 	if(clr) begin
 		count_out <= 32'b0;
 	end
