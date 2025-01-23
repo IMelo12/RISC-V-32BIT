@@ -48,18 +48,49 @@
 `define funct3_slti  3'b010
 `define funct3_sltiu 3'b011
 
+`define funct3_lb    3'b000
+`define funct3_lh    3'b001
+`define funct3_lw    3'b010
+`define funct3_lbu   3'b100
+`define funct3_lhu   3'b101
+
+`define funct3_sb    3'b000
+`define funct3_sh    3'b001
+`define funct3_sw    3'b010
+
+`define funct3_beq   3'b000
+`define funct3_bne   3'b001
+`define funct3_blt   3'b100
+`define funct3_bge   3'b101
+`define funct3_bltu  3'b110
+`define funct3_bgeu  3'b111
+
+`define funct3_jalr  3'b000
+
+`define funct3_ecall 3'b000
+`define funct3_ebreak 3'b000
+
+
+
 
 // funct7
 `define funct7_add  7'b0000000
-`define funct7_sub  3'b0010100
-`define funct7_xor  3'b0000000
-`define funct7_or   3'b0000000
-`define funct7_and  3'b0000000
-`define funct7_sll  3'b0000000
-`define funct7_srl  3'b0000000
-`define funct7_sra  3'b0010100
-`define funct7_slt  3'b0000000
-`define funct7_sltu 3'b0000000
+`define funct7_sub  7'b0010100
+`define funct7_xor  7'b0000000
+`define funct7_or   7'b0000000
+`define funct7_and  7'b0000000
+`define funct7_sll  7'b0000000
+`define funct7_srl  7'b0000000
+`define funct7_sra  7'b0010100
+`define funct7_slt  7'b0000000
+`define funct7_sltu 7'b0000000
+
+`define funct7_slli 7'b0000000
+`define funct7_srli 7'b0000000
+`define funct7_srai 7'b0010100
+
+`define funct7_ecall 7'b0000000
+`define funct7_ebreak 7'b000001
 
 // datapath
 
@@ -103,16 +134,16 @@
 `define DP_lbu   11'b01010000000
 `define DP_lhu   11'b01010000000
 
-`define DP_sb    11'b
-`define DP_sh
-`define DP_sw
+`define DP_sb    11'b00000000010
+`define DP_sh    11'b00000000010
+`define DP_sw    11'b00000000010
 
-`define DP_beq
-`define DP_bne
-`define DP_blt
-`define DP_bge
-`define DP_bltu
-`define DP_bgeu
+`define DP_beq   11'b00000
+`define DP_bne   11'b00000
+`define DP_blt   11'b00000
+`define DP_bge   11'b00000
+`define DP_bltu  11'b00000
+`define DP_bgeu  11'b00000
 
 `define DP_jal
 `define DP_jalr
@@ -120,3 +151,24 @@
 `define DP_auipc
 `define DP_ecall
 `define DP_ebreak
+
+// ALU op-codes
+`define ALU_add   5'b00000
+`define ALU_sub   5'b00001 
+`define ALU_xor   5'b00010 
+`define ALU_or    5'b00011
+`define ALU_and   5'b00100 
+`define ALU_sll   5'b00101 
+`define ALU_srl   5'b00110 
+`define ALU_sra   5'b00111 
+`define ALU_slt   5'b01000 
+`define ALU_sltu  5'b01001 
+`define ALU_addi  5'b01010 
+`define ALU_xori  5'b01011 
+`define ALU_ori   5'b01100 
+`define ALU_andi  5'b01101 
+`define ALU_slli  5'b01110 
+`define ALU_srli  5'b01111 
+`define ALU_srai  5'b10000
+`define ALU_sltu  5'b10001 
+`define ALU_sltiu 5'b10010
