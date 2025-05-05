@@ -1,31 +1,46 @@
 module instrcutiondecoder(
     input [31:0] instruction,
-    output [4:0] rd,
-    output [4:0] rs1,
-    output [4:0] rs2,
-    output [3:0] ALU,
+    output reg [4:0] rd,
+    output reg [4:0] rs1,
+    output reg [4:0] rs2,
     output immediate_select,
     output mem_write,
     output [3:0] branch,
     output unsign,
-    output WE,
+    output Write_enable,
     output ALU_WB,
     output IDEX_Memread,
     output jump,
-
-    output datapath[10:0],
-    output ALU_control[3:0]
+    output reg [4:0] ALU_control
 );
+
+
+`include "defines.v"
+
+reg [10:0]datapath;
+
+assign jump = datapath[10];
+assign IDEX_Memread = datapath[9];
+assign ALU_WB = datapath[8];
+assign Write_enable = datapath[7];
+assign unsign = datapath[6];
+assign branch = datapath[5:2];
+assign mem_write = datapath[1];
+assign immediate_select = datapath[0];
+
+// Internal signal declarations
+wire [6:0] opcode = instruction[6:0];
+wire [2:0] func3 = instruction[14:12];
+wire [6:0] func7 = instruction[31:25];
+
 
 always @(*) begin
 
-    assign opcode = instrcution[6:0];
-    assign rd = instrcution[11:7];
-    assign rs1 = instrcution[19:15];
-    assign rs2 = instrcution[24:20];
-    assign func3 = instrcution[14:12];
-    assign func7 = instrcution[31:25];
-
+	rd <= instruction[11:7];
+	rs1 <= instruction[19:15];
+	rs2 <= instruction[24:20];
+	
+	 
     case(opcode)
         `OP_TYPE_R:
             begin
@@ -61,8 +76,8 @@ always @(*) begin
                 `funct3_slli: datapath <= `DP_slli;
                 `funct3_srli: 
                     case(func7)
-                        `funct7_srli: datapath <= DP_srli;
-                        `funct7_srai: datapath <= DP_srai;
+                        `funct7_srli: datapath <= `DP_srli;
+                        `funct7_srai: datapath <= `DP_srai;
                     endcase 
                 `funct3_srai:  datapath <= `DP_srai;
                 `funct3_slti:  datapath <= `DP_slti;
@@ -107,22 +122,13 @@ always @(*) begin
             endcase
 
         `OP_TYPE_J:
-            case(func3)
-                `funct3_jal: datapath <= `DP_jal;
-                `funct3_jalr: datapath <= `DP_jalr;
-            endcase
+				datapath <= `DP_jalr;
+				
 
-        `OP_TYPE_U:
-            case(func3)
-                `funct3_lui: datapath <= `DP_lui;
-                `funct3_auipc: datapath <= `DP_auipc;
-            endcase
+        `OP_TYPE_U: datapath <= `DP_auipc;
+            
 
-        `OP_TYPE_U2:
-            case(func3)
-                `funct3_ecall: datapath <= `DP_ecall;
-                `funct3_ebreak: datapath <= `DP_ebreak;
-            endcase
+        `OP_TYPE_U2: datapath <= `DP_auipc;
 
         default:
             datapath <= 11'b0;
@@ -156,6 +162,8 @@ always @(*) begin
                     `funct3_sltu: ALU_control <= `ALU_sltu;
                 endcase
             end
+            default:
+                ALU_control <= 5'b0;
     endcase
 end
 

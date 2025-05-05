@@ -3,9 +3,8 @@ module ALU(
     input [31:0] b,
     input [12:0] imm,
     input [3:0]  select,
-
     output [31:0] result
-)
+);
 
 `include "defines.v"
 
@@ -29,6 +28,7 @@ always @(*) begin
         `ALU_srai: result <= a >>> imm;
         `ALU_slti: result <= (a < imm)? 32'b1 : 32'b0;
         `ALU_sltiu: result <= (a < imm)? 32'b1 : 32'b0;
+        default: result <= 32'b0;
     endcase
 end
 
