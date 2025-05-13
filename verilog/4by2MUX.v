@@ -1,4 +1,4 @@
-module 4by2MUX #(parameter WIDTH)
+module FOURbyTWOMUX #(parameter WIDTH=8)
 (
     input [WIDTH - 1:0] a,
     input [WIDTH - 1:0] b,
@@ -16,7 +16,7 @@ begin
     2'b01: e = b;
     2'b10: e = c;
     2'b11: e = d;
-    default: {WIDTH{1'b0}};
+    default: e = {WIDTH{1'b0}};
     endcase
 end
 

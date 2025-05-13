@@ -5,18 +5,18 @@ module forwardingUnit(
     input [4:0] rs2,
     input regWrite_Wb,
     input regWrite_Mem,
-    output A,
-    output B
+    output reg A,
+    output reg B
 );
 
 always @(*) begin
-    if ((rdmem == RS_1) & (regWrite_Mem != 0 & rdmem !=0))
+    if ((rdmem == rs1) & (regWrite_Mem != 0 & rdmem !=0))
           begin
           	A = 2'b10;
           end
       	else
           begin 
-            if ((rdwb == RS_1) & (regWrite_Wb != 0 & rdwb != 0) & ~((rdmem == RS_1) &(regWrite_Mem != 0 & rdmem !=0)  )  )
+            if ((rdwb == rs1) & (regWrite_Wb != 0 & rdwb != 0) & ~((rdmem == rs1) &(regWrite_Mem != 0 & rdmem !=0)  )  )
               begin
                 A = 2'b01;
               end
@@ -26,13 +26,13 @@ always @(*) begin
               end
           end
       
-        if ( (rdmem == RS_2) & (regWrite_Mem != 0 & rdmem !=0) )
+        if ( (rdmem == rs2) & (regWrite_Mem != 0 & rdmem !=0) )
           begin
             B = 2'b10;
           end
         else
           begin
-            if ( (rdwb == RS_2) & (regWrite_Wb != 0 & rdwb != 0) &  ~((regWrite_Mem != 0 & rdmem !=0 ) & (rdmem == RS_2) ) )
+            if ( (rdwb == rs2) & (regWrite_Wb != 0 & rdwb != 0) &  ~((regWrite_Mem != 0 & rdmem !=0 ) & (rdmem == rs2) ) )
               begin
                 B = 2'b01;
               end

@@ -9,7 +9,7 @@ module forwarding
     input bubble,
     output [1:0]A,
     output [1:0]B
-)
+);
 
 always @(*) 
     begin

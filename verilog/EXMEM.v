@@ -54,6 +54,6 @@ always @(posedge clk) begin
         rd_out <= rd;
     end
         
-
+end
 
 endmodule

@@ -1,4 +1,4 @@
-module 2by1MUX #(parameter WIDTH)
+module TWObyONEMUX #(parameter WIDTH=32)
 (
     input [WIDTH - 1:0]  a,
     input [WIDTH - 1:0]  b,

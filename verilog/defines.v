@@ -1,11 +1,8 @@
-<<<<<<< HEAD
+
 `ifndef DEFINES_HH
 `define DEFINES_HH
 
 
-
-=======
->>>>>>> 5d7ba634abf9219d1eb0267905b07518b2cbf043
 `define OP_TYPE_R  7'b0110011
 `define OP_TYPE_I  7'b0010011
 `define OP_TYPE_I2 7'b0000011 //load
@@ -175,7 +172,7 @@
 `define ALU_slli  5'b01110 
 `define ALU_srli  5'b01111 
 `define ALU_srai  5'b10000
-`define ALU_sltu  5'b10001 
+`define ALU_slti  5'b10001 
 `define ALU_sltiu 5'b10010
 
 `endif

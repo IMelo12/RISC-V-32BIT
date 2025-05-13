@@ -21,15 +21,15 @@ reg [6:0] opcode;
 reg [2:0] func3;
 reg [6:0] func7;
 
-assign rd = instrcution[11:7];
-assign rs1 = instrcution[19:15];
-assign rs2 = instrcution[24:20];
+assign rd = instruction[11:7];
+assign rs1 = instruction[19:15];
+assign rs2 = instruction[24:20];
 
 always @(*) begin
 
-    opcode = instrcution[6:0];
-    func3 = instrcution[14:12];
-    func7 = instrcution[31:25];
+    opcode = instruction[6:0];
+    func3 = instruction[14:12];
+    func7 = instruction[31:25];
 
     case(opcode)
         `OP_TYPE_R:

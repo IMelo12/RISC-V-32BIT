@@ -22,8 +22,8 @@ wire [4:0] rd_ID;
 wire [4:0] rs1_ID;
 wire [4:0] rs2_ID;
 wire [10:0] datapath_ID;
-wire [3:0] ALU_ID
-wire [31:0] imm_ID
+wire [3:0] ALU_ID;
+wire [31:0] imm_ID;
 
 wire [31:0] rs1_val_ID;
 wire [31:0] rs2_val_ID;
@@ -55,7 +55,7 @@ wire MUX_SEL_B;
 
 wire [31:0] ALU_INA;
 wire [31:0] ALU_INB;
-wire [31:0] ALU_OUT_EX
+wire [31:0] ALU_OUT_EX;
 wire [3:0] ALU_control_EX;
 
 wire branch_unit_out_EX;
@@ -78,7 +78,7 @@ wire write_enable_MEM;
 wire [31:0] ALU_FORWARD_WB;
 wire [31:0] ALU_DATA_WB;
 wire [4:0] rd_WB;
-wire ALU_WB
+wire ALU_WB;
 wire write_enable_WB;
 wire [31:0] data_out_WB;
 
@@ -89,7 +89,7 @@ adder PC_add(
     .y(PCADD_out)
 );
 
-2by1MUX PCMux #(.WIDTH(32))(
+TWObyONEMUX #(.WIDTH(32)) PCMux(
     .a(PCADD_out),
     .b(PC_MEM),
     .select(PC_muxSel),
@@ -104,12 +104,12 @@ program_counter PC(
     .count_out(PC_out)
 );
 
-IFIF IFID_reg(
+IFID IFID_reg(
     .instruction_in(INSTRUCTION_MEM_OUT), //need ROM 
     .PC_in(PC_out),
     .clk(clk),
     .clr(clr),
-    .stall(HZD_stall)
+    .stall(HZD_stall),
     .instruction_out(instruction_ID),
     .PC_out(PC_ID)
 );
@@ -124,12 +124,12 @@ instructiondecoder Decoder(
 );
 
 immediateGenerator immgen(
-    .isnt(instruction_ID),
+    .inst(instruction_ID),
     .immediate(imm_ID)
 );
 
 registerFile REGFILE(
-    .select(rd_WB)
+    .select(rd_WB),
     .data_in(ALU_FORWARD_WB),
     .write_enable(write_enable_WB),
     .clk(clk),
@@ -162,33 +162,32 @@ IDEX IDEX_reg(
     .rs1_out(rs1_EX),
     .rs2_out(rs2_EX),
     .PC_IN_out(PC_EX),
-    .immediate_select(immediate_select),
     .ALU_out(ALU_control_EX),
     .rd_out(rd_EX),
     .rs1_val_out(rs1_val_EX),
     .rs2_val_out(rs2_val_EX),
-    .datapath(datapath_EX)
+    .datapath_out(datapath_EX)
 );
 
 // PC FORWARD 
-2by1MUX MUX1 #(.WIDTH(32))(
+TWObyONEMUX #(.WIDTH(32)) MUX1(
     .a(PC_EX),
     .b(rs1_EX),
     .select(datapath_EX[10]),
     .c(mux1_out)
 );
 
-adder adder1 #(.WIDTH(32))(
+adder #(.WIDTH(32)) adder1(
     .a(mux1_out),
     .b(PC_EX),
     .y(adder1_out)
-)
+);
 
 branch branch_unit(
     .A(ALU_INA),
     .B(rs2_val_EX),
     .Unsigned(unsign_EX),
-    .select(datapath[5:2]),
+    .select(datapath_EX[5:2]),
     .branch_out(branch_unit_out_EX)
 );
 
@@ -199,13 +198,13 @@ forwardingUnit forward(
     .rs2(rs2_EX),
     .rdmem(rd_MEM),
     .rdwb(rd_WB),
-    .regwrite_wb(write_enable_WB),
-    .regwrite_mem(write_enable_MEM),
+    .regWrite_Wb(write_enable_WB),
+    .regWrite_Mem(write_enable_MEM),
     .A(MUX_SEL_A),
     .B(MUX_SEL_B)
-)
+);
 
-4by2MUX MUX2 #(.WIDTH(32))(
+FOURbyTWOMUX #(.WIDTH(32))MUX2(
     .a(rs1_val_EX),
     .b(ALU_FORWARD_WB),
     .c(ALU_VAL_MEM),
@@ -214,7 +213,7 @@ forwardingUnit forward(
     .e(ALU_INA)
 );
 
-4by2MUX MUX3 #(.WIDTH(32))(
+FOURbyTWOMUX #(.WIDTH(32)) MUX3(
     .a(rs2_val_EX),
     .b(ALU_FORWARD_WB),
     .c(ALU_VAL_MEM),
@@ -223,7 +222,7 @@ forwardingUnit forward(
     .e(mux3_out)
 );
 
-2by1MUX MUX4 #(.WIDTH(32))(
+TWObyONEMUX #(.WIDTH(32)) MUX4(
     .a(mux3_out),
     .b(immediate_EX),
     .select(immediate_select_EX),
@@ -240,9 +239,9 @@ ALU ALU_EX(
 EXMEM EXMEM_REG(
     .branch(branch_unit_out_EX),
     .ALU_WB(ALU_WB_EX),
-    .mem_write(datapath[1]),
-    .write_enable(datapath[7]),
-    .jump(datapath[10]),
+    .mem_write(datapath_EX[1]),
+    .write_enable(datapath_EX[7]),
+    .jump(datapath_EX[10]),
     .bubble(bubble_EX),
     .program_counter(PC_EX),
     .ALU(ALU_OUT_EX),
@@ -269,22 +268,22 @@ assign RAM_IN_DATA = write_data_MEM;
 assign RAM_IN_ADDRESS = ALU_MEM;
 assign RAM_IN_WRITE = memWrite_MEM;
 
-MEMWB memwb_reg(
+MEMWB memwbreg(
     .ALU_WB(ALU_WB_MEM),
     .write_enable(write_enable_MEM),
     .data(RAM_OUT),
     .ALU(ALU_MEM),
     .rd(rd_MEM),
     .clk(clk),
-    .clr(clr),w
+    .clr(clr),
     .ALU_WB_out(ALU_WB),
-    .write_enable_out(write_enable_out),
-    .data_out(data_out);
+    .write_enable_out(write_enable_WB),
+    .data_out(data_out_WB),
     .ALU_out(ALU_DATA_WB),
     .rd_out(rd_WB)
 );
 
-2by1MUX WBMUX #(.WIDTH(32)) (
+TWObyONEMUX #(.WIDTH(32)) WBMUX(
     .a(data_out_WB),
     .b(ALU_DATA_WB),
     .select(ALU_WB),
