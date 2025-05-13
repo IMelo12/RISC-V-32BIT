@@ -1,25 +1,27 @@
 module immediateGenerator(
-    input [31:0] instrcution,
+    input [31:0] inst,
     output reg [31:0]immediate
 );
 
-wire [31:0]I_type = instrcution[31:20]||32'b0;
-wire [31:0]S_type = {instrcution[31:25],instrcution[11:7]}||32'b0;
-wire [31:0]B_type = {1'b0,instrcution[11:8],instrcution[30:25],instrcution[7],instrcution[31]}||32'b0;
-wire [31:0]U_type = {12'b0,instrcution[21:12]}||32'b0;
-wire [31:0]J_type = {1'b0,instrcution[30:21], instrcution[20], instrcution[19:12],instrcution[31]}||32'b0;
+wire [31:0] I_type = { {20{inst[31]}}, inst[31:20] };
+wire [31:0] S_type = { {20{inst[31]}}, inst[31:25], inst[11:7] };
+wire [31:0] B_type = { {20{inst[31]}}, inst[7], inst[30:25], inst[11:8]};
+wire [31:0] U_type = { {12{inst[31]}}, inst[31:12]};
+wire [31:0] J_type = { {12{inst[31]}}, inst[31], inst[19:12],inst[20],inst[30:21]};
 
-always@(*) begin
-    if(instrcution[6:0] == 7'b0010011 || instrcution[6:0] == 7'b0000011 || instrcution[6:0] == 7'b1100111 || instrcution[6:0] == 1'b1110011) // I_type
-        immediate = I_type;
-    else if(instrcution[6:0] == 7'b0110111 || instrcution[6:0] == 7'b0010111 ) // U_type
-        immediate = U_type;
-    else if(instrcution[6:0] == 7'b1101111) // J_type
-        immediate = J_type;
-    else if(instrcution[6:0] == 7'b0100011) // S_type
-        immediate = S_type;
-    else if(instrcution[6:0] == 7'b1100011) // B_type
-        immediate = B_type;
-end
+always @(*) begin
+        case (inst[6:0])
+            7'b0010011, 
+            7'b0000011, 
+            7'b1100111, 
+            7'b1110011: immediate = I_type; // I-type
+            7'b0110111, 
+            7'b0010111: immediate = U_type; // U-type
+            7'b1101111: immediate = J_type; // J-type
+            7'b0100011: immediate = S_type; // S-type
+            7'b1100011: immediate = B_type; // B-type
+            default: immediate = 32'b0; // Default case
+        endcase
+    end
 
 endmodule

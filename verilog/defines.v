@@ -1,4 +1,5 @@
-
+`ifndef DEFINES_HH
+`define DEFINES_HH
 
 
 
@@ -138,15 +139,15 @@
 `define DP_sh    11'b00000000010
 `define DP_sw    11'b00000000010
 
-`define DP_beq   11'b00000
-`define DP_bne   11'b00000
-`define DP_blt   11'b00000
-`define DP_bge   11'b00000
-`define DP_bltu  11'b00000
-`define DP_bgeu  11'b00000
+`define DP_beq   11'b00000000100
+`define DP_bne   11'b00000001000
+`define DP_blt   11'b00000001100
+`define DP_bge   11'b00000010000
+`define DP_bltu  11'b00000010100
+`define DP_bgeu  11'b00000011000
 
-`define DP_jal
-`define DP_jalr
+`define DP_jal   11'b10000000000
+`define DP_jalr  11'b10000000000
 `define DP_lui 
 `define DP_auipc
 `define DP_ecall
@@ -172,3 +173,5 @@
 `define ALU_srai  5'b10000
 `define ALU_sltu  5'b10001 
 `define ALU_sltiu 5'b10010
+
+`endif

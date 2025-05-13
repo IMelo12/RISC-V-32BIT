@@ -1,30 +1,35 @@
-module instrcutiondecoder(
+module instructiondecoder(
     input [31:0] instruction,
     output [4:0] rd,
     output [4:0] rs1,
     output [4:0] rs2,
-    output [3:0] ALU,
-    output immediate_select,
-    output mem_write,
-    output [3:0] branch,
-    output unsign,
-    output WE,
-    output ALU_WB,
-    output IDEX_Memread,
-    output jump,
+    //output [3:0] ALU,
+    //output immediate_select,
+    //output mem_write,
+    //output [3:0] branch,
+    //output unsign,
+    //output WE,
+    //output ALU_WB,
+    //output IDEX_Memread,
+    //output jump,
 
-    output datapath[10:0],
-    output ALU_control[3:0]
+    output reg [10:0] datapath,
+    output reg [3:0] ALU_control
 );
+
+reg [6:0] opcode;
+reg [2:0] func3;
+reg [6:0] func7;
+
+assign rd = instrcution[11:7];
+assign rs1 = instrcution[19:15];
+assign rs2 = instrcution[24:20];
 
 always @(*) begin
 
-    assign opcode = instrcution[6:0];
-    assign rd = instrcution[11:7];
-    assign rs1 = instrcution[19:15];
-    assign rs2 = instrcution[24:20];
-    assign func3 = instrcution[14:12];
-    assign func7 = instrcution[31:25];
+    opcode = instrcution[6:0];
+    func3 = instrcution[14:12];
+    func7 = instrcution[31:25];
 
     case(opcode)
         `OP_TYPE_R:
