@@ -5,8 +5,8 @@ wire [31:0] out;
 
 
 immediateGenerator imm(
-.instrcution(inst),
-.immediate(out)
+	.instrcution(inst),
+	.immediate(out)
 );
 
 initial begin

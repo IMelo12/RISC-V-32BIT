@@ -66,8 +66,8 @@ always @(*) begin
                 `funct3_slli: datapath <= `DP_slli;
                 `funct3_srli: 
                     case(func7)
-                        `funct7_srli: datapath <= DP_srli;
-                        `funct7_srai: datapath <= DP_srai;
+                        `funct7_srli: datapath <= `DP_srli;
+                        `funct7_srai: datapath <= `DP_srai;
                     endcase 
                 `funct3_srai:  datapath <= `DP_srai;
                 `funct3_slti:  datapath <= `DP_slti;
@@ -112,22 +112,13 @@ always @(*) begin
             endcase
 
         `OP_TYPE_J:
-            case(func3)
-                `funct3_jal: datapath <= `DP_jal;
-                `funct3_jalr: datapath <= `DP_jalr;
-            endcase
+				datapath <= `DP_jalr;
+				
 
-        `OP_TYPE_U:
-            case(func3)
-                `funct3_lui: datapath <= `DP_lui;
-                `funct3_auipc: datapath <= `DP_auipc;
-            endcase
+        `OP_TYPE_U: datapath <= `DP_auipc;
+            
 
-        `OP_TYPE_U2:
-            case(func3)
-                `funct3_ecall: datapath <= `DP_ecall;
-                `funct3_ebreak: datapath <= `DP_ebreak;
-            endcase
+        `OP_TYPE_U2: datapath <= `DP_auipc;
 
         default:
             datapath <= 11'b0;
@@ -161,6 +152,8 @@ always @(*) begin
                     `funct3_sltu: ALU_control <= `ALU_sltu;
                 endcase
             end
+            default:
+                ALU_control <= 5'b0;
     endcase
 end
 

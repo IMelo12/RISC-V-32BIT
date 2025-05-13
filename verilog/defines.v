@@ -1,8 +1,11 @@
+<<<<<<< HEAD
 `ifndef DEFINES_HH
 `define DEFINES_HH
 
 
 
+=======
+>>>>>>> 5d7ba634abf9219d1eb0267905b07518b2cbf043
 `define OP_TYPE_R  7'b0110011
 `define OP_TYPE_I  7'b0010011
 `define OP_TYPE_I2 7'b0000011 //load
@@ -146,12 +149,13 @@
 `define DP_bltu  11'b00000010100
 `define DP_bgeu  11'b00000011000
 
-`define DP_jal   11'b10000000000
-`define DP_jalr  11'b10000000000
-`define DP_lui 
-`define DP_auipc
-`define DP_ecall
-`define DP_ebreak
+`define DP_jal    11'b10000000000
+`define DP_jalr   11'b10000000000
+`define DP_lui    11'b0
+`define DP_auipc  11'b0
+`define DP_ecall  11'b0
+`define DP_ebreak 11'b0
+
 
 // ALU op-codes
 `define ALU_add   5'b00000
