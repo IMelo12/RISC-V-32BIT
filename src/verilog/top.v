@@ -16,9 +16,6 @@ module risc(
     output branch_hier,
     output [1:0] forwardA_hier,
     output [1:0] forwardB_hier,
-    output [31:0] ALUmux1,
-    output [31:0] ALUmux2,
-    output [31:0] final_mux
 );
 
 
